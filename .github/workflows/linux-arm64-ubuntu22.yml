@@ -40,7 +40,7 @@ jobs:
     - name: 下载并编译 libsrtp
       run: |
         cd 3rdpart/libsrtp
-        ./configure --enable-openssl
+        CFLAGS="-fcommon" ./configure --enable-openssl
         make -j $(nproc)
         sudo make install
         sudo ldconfig
