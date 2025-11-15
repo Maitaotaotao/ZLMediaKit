@@ -1,8 +1,6 @@
 name: LinuxArm64Ubuntu-AmdCentos
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:  # ✅ 支持手工运行
 
 jobs:
