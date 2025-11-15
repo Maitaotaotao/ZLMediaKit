@@ -19,7 +19,7 @@ jobs:
     - name: 安装系统依赖
       run: |
         sudo apt-get update
-        sudo apt-get install -y git wget build-essential cmake libssl-dev
+        sudo apt-get install -y git wget build-essential cmake libssl-dev autoconf libtool
 
     - name: 下载 SRTP
       uses: actions/checkout@v4
@@ -36,6 +36,15 @@ jobs:
         fetch-depth: 1
         ref: 0.9.5.0
         path: 3rdpart/usrsctp
+
+    - name: 下载并编译 libsrtp
+      run: |
+        cd 3rdpart/libsrtp
+        ./configure --enable-openssl
+        make -j $(nproc)
+        sudo make install
+        sudo ldconfig
+        cd ../..
 
     - name: 编译 ZLMediaKit (ARM64)
       run: |
@@ -55,7 +64,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ github.workflow }}_ubuntu2204_arm64_${{ env.BRANCH }}_${{ env.DATE }}
-        path: linux_build/*          # 请根据实际输出调整路径
+        path: release/*          # 请根据实际输出调整路径
         if-no-files-found: error
         retention-days: 90
 
